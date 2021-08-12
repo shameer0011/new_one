@@ -7,8 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import Typography from "@material-ui/core/Typography";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import PhoneIcon from "@material-ui/icons/Phone";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,43 +45,35 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     width: "100%",
-    backgroundColor: theme.palette.background.paper,
+    // backgroundColor: theme.palette.background.paper,
+    backgroundColor: "black",
+  },
+  tabpanel: {
+    marginLeft: "500px",
+    marginRight: "200px",
+    backgroundColor: "#222222",
   },
 }));
 
 export default function ScrollableTabsButtonPrevent() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const values = datas => {
-    console.log(datas, "dattasss");
+    var body = {
+      first_name: datas.firstname,
+      last_name: datas.lastname,
+      username: datas.username,
+      email: datas.email,
+      password: datas.password,
+      timezone: datas.timezone,
+      phone: datas.phone,
+      message: datas.message,
+      captcha: true,
+    };
     if (datas.name == "Create Your Talent Account") {
-      // var body = {
-      //   first_name: datas.firstname,
-      //   last_name: datas.lastname,
-      //   username: datas.username,
-      //   email: datas.email,
-      //   password: datas.password,
-      //   timezone: datas.timezone,
-      //   phone: datas.phone,
-      //   message: datas.message,
-      //   captcha: true,
-      // };
-      var body = {
-        first_name: "Test",
-        last_name: "Testing",
-        username: "tesoter-ht",
-        email: "tester-h@gmail.com",
-        password: "Password12#",
-        timezone: "America/New_York",
-        phone: "99995668450",
-        message: "rretrtrtr5to",
-        captcha: true,
-      };
-
       axios({
         method: "post",
         url: "https://admin.fanconvo.com/api/v3/sign-up/talent",
@@ -96,7 +86,17 @@ export default function ScrollableTabsButtonPrevent() {
           console.log(error);
         });
     } else {
-      console.log("error");
+      axios({
+        method: "post",
+        url: "https://admin.fanconvo.com/api/v3/sign-up/fan",
+        data: body,
+      })
+        .then(function(response) {
+          console.log(response.data);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   };
 
@@ -108,14 +108,26 @@ export default function ScrollableTabsButtonPrevent() {
         variant="scrollable"
         scrollButtons="off"
         aria-label="scrollable prevent tabs example"
+        style={{ alignContent: "center" }}
+        className={classes.tabpanel}
       >
-        <Tab icon={<PhoneIcon />} aria-label="phone" {...a11yProps(0)} />
-        <Tab icon={<FavoriteIcon />} aria-label="favorite" {...a11yProps(1)} />
+        <Tab
+          icon="Fan Signup"
+          aria-label="phone"
+          {...a11yProps(0)}
+          style={{ color: "white", background: "bleck" }}
+        />
+        <Tab
+          icon="Talent Signup"
+          aria-label="favorite"
+          {...a11yProps(1)}
+          style={{ color: "white", background: "bleck" }}
+        />
       </Tabs>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} index={0} className={classes.tabpanel}>
         <Register name="Create Your fan Account" formValuesToTabs={values} />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={value} index={1} className={classes.tabpanel}>
         <Register
           name="Create Your Talent Account"
           talent={true}
